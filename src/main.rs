@@ -40,7 +40,7 @@ fn main() -> Result<()> {
     if let Some(repo_text) = git_status {
         print!("{} {} ", repo_text, Colour::Blue.bold().paint("|"));
     }
-    println!("{}  ", arrow);
+    print!("{}  ", arrow);
 
     Ok(())
 }
