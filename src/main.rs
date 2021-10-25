@@ -1,3 +1,4 @@
+use std::env;
 use std::error::Error;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -7,6 +8,13 @@ use ansi_term::Colour;
 type Result<T> = core::result::Result<T, Box<dyn Error>>;
 
 fn main() -> Result<()> {
+    let args: Vec<String> = env::args().collect();
+    if args.len() == 2 {
+        if let Some("source") = args.get(1).map(|s| s.as_str()) {
+            print_fish_source();
+            return Ok(());
+        }
+    }
     let git_status = match git2::Repository::discover(".") {
         Ok(repo) => {
             let name = get_current_branch(&repo)?;
@@ -26,12 +34,13 @@ fn main() -> Result<()> {
         Err(_e) => None,
     };
 
+    // TODO: Read last command status from P_LAST_CMD_STATUS
     let arrow = Colour::Red.bold().paint("▶");
 
     if let Some(repo_text) = git_status {
         print!("{} {} ", repo_text, Colour::Blue.bold().paint("|"));
     }
-    println!("{}", arrow);
+    println!("{}  ", arrow);
 
     Ok(())
 }
@@ -72,4 +81,15 @@ fn get_git_status(repo: &git2::Repository) -> Result<String> {
     } else {
         Ok(format!(" {}", modified_files.to_string(),))
     }
+}
+
+fn print_fish_source() {
+    println!(
+        r#"
+function fish_prompt
+    set P_LAST_CMD_STATUS $status
+    p
+end
+    "#
+    );
 }
