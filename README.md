@@ -2,7 +2,7 @@
 
 A very opinionated, zero-configuration shell prompt
 
-![preview](https://cdn.mewna.xyz/2021/10/25/jcy3ypOi2IJCW.png)
+![preview](https://cdn.mewna.xyz/2021/10/28/c0KkyIcwCR981.png)
 
 ## Usage
 
