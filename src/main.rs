@@ -9,10 +9,14 @@ type Result<T> = core::result::Result<T, Box<dyn Error>>;
 
 fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
+    let mut last_status = "0";
     if args.len() == 2 {
-        if let Some("source") = args.get(1).map(|s| s.as_str()) {
+        let arg = args.get(1).map(|s| s.as_str());
+        if let Some("source") = arg {
             print_fish_source();
             return Ok(());
+        } else if let Some(status) = arg {
+            last_status = status;
         }
     }
     let git_status = match git2::Repository::discover(".") {
@@ -35,7 +39,12 @@ fn main() -> Result<()> {
     };
 
     // TODO: Read last command status from P_LAST_CMD_STATUS
-    let arrow = Colour::Red.bold().paint("▶");
+    let arrow_colour = if last_status == "0" {
+        Colour::Red
+    } else {
+        Colour::Yellow
+    };
+    let arrow = arrow_colour.bold().paint("▶");
 
     if let Some(repo_text) = git_status {
         print!("{} {} ", repo_text, Colour::Blue.bold().paint("|"));
@@ -88,7 +97,7 @@ fn print_fish_source() {
         r#"
 function fish_prompt
     set P_LAST_CMD_STATUS $status
-    p
+    p $P_LAST_CMD_STATUS
 end
     "#
     );
