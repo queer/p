@@ -38,7 +38,6 @@ fn main() -> Result<()> {
         Err(_e) => None,
     };
 
-    // TODO: Read last command status from P_LAST_CMD_STATUS
     let arrow_colour = if last_status == "0" {
         Colour::Red
     } else {
