@@ -87,7 +87,7 @@ fn get_git_status(repo: &git2::Repository) -> Result<String> {
     if modified_files == 0 {
         Ok(String::new())
     } else {
-        Ok(format!(" {}", modified_files.to_string(),))
+        Ok(format!(" {}", modified_files.to_string()))
     }
 }
 
